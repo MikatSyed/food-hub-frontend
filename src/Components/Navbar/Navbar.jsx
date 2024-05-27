@@ -1,10 +1,38 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FiMenu, FiX, FiChevronDown } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { getFromLocalStorage } from '../../utils/local-storage';
+import axios from 'axios';
+import { TbCoinFilled } from "react-icons/tb";
+import { removeUserInfo } from '../../utils/auth.service';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState({});
+  const [userData, setUserData] = useState(null);
+  console.log(userData?.displayName)
+  const authKey = 'accessToken'; // Set your access token key here
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const accessToken = getFromLocalStorage(authKey);
+        if (accessToken) {
+          const response = await axios.get('http://localhost:6660/api/v1/auth/profile', {
+            headers: {
+              Authorization: accessToken
+            }
+          });
+          console.log(response.data.data,'22')
+          setUserData(response.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
@@ -21,6 +49,11 @@ const Navbar = () => {
     setDropdownOpen({});
   };
 
+  const handleLogout = () => {
+    removeUserInfo(); // Remove user info from local storage
+    setUserData(null); // Clear user data state
+  };
+
   const navItems = [
     {
       title: 'Home',
@@ -32,7 +65,7 @@ const Navbar = () => {
     },
     {
       title: 'Add Recipes',
-      href: '/add-recipes',
+      href: '/add-recipe',
     },
   ];
 
@@ -64,9 +97,25 @@ const Navbar = () => {
                 </li>
               ))}
             </ul>
-            <button className="bg-white hover:bg-[#22c55e] text-[#22c55e] hover:text-white font-semibold py-2 px-8 rounded-full ml-6">
-              Login
-            </button>
+            {userData ? (
+  <div className="flex items-center space-x-4">
+    
+    <div className="flex items-center">
+      <TbCoinFilled  className="text-yellow-500 w-6 h-6" /> {/* Add coin icon */}
+      <span className="text-white ml-1">{userData?.coins} </span>
+    </div>
+    <div>
+      <img src={userData?.photoURL} alt="User" className="w-10 h-10 rounded-full" />
+    </div>
+    <button className="bg-red-500 hover:bg-red-400 text-white hover:text-white font-semibold py-2 px-8 rounded-full ml-6" onClick={() => handleLogout()}>
+      Logout
+    </button>
+  </div>
+) : (
+  <Link to="/login" className="bg-white hover:bg-[#22c55e] text-[#22c55e] hover:text-white font-semibold py-2 px-8 rounded-full ml-6">
+    Login
+  </Link>
+)}
           </div>
           <div className="flex items-center md:hidden">
             <button
@@ -121,9 +170,25 @@ const Navbar = () => {
               )}
             </div>
           ))}
-          <button className="bg-white hover:bg-[#22c55e] text-[#22c55e] hover:text-white font-semibold py-2 px-8 rounded-full">
-            Login
-          </button>
+            {userData ? (
+  <div className="flex items-center space-x-4">
+    
+    <div className="flex items-center">
+      <TbCoinFilled  className="text-yellow-500 w-6 h-6" /> {/* Add coin icon */}
+      <span className="text-white ml-1">{userData?.coins} </span>
+    </div>
+    <div>
+      <img src={userData?.photoURL} alt="User" className="w-10 h-10 rounded-full" />
+    </div>
+    <button className="bg-red-500 hover:bg-red-400 text-white hover:text-white font-semibold py-2 px-8 rounded-full ml-6" onClick={() => console.log('Logout')}>
+      Logout
+    </button>
+  </div>
+) : (
+  <Link to="/login" className="bg-white hover:bg-[#22c55e] text-[#22c55e] hover:text-white font-semibold py-2 px-8 rounded-full ml-6">
+    Login
+  </Link>
+)}
         </div>
       </div>
     </nav>

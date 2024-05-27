@@ -1,7 +1,7 @@
 import DevInfo from "./Components/DevInfo/DevInfo";
 import Footer from "./Components/Footer/Footer";
 import Header from "./Components/Header/Header";
-import Recipe from "./Components/Recipe/Recipe";
+import AllRecipes from "./Components/Recipe/AllRecipes";
 import SuccessStories from "./Components/SuccessStories/SuccessStories";
 
 
@@ -11,7 +11,7 @@ function App() {
      <Header/>
      <SuccessStories/>
      <DevInfo/>
-     <Recipe/>
+     <AllRecipes/>
       <Footer/>
     </>
   );

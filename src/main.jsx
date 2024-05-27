@@ -3,12 +3,17 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import AddTask from "./Components/AddTask/AddTask.jsx";
+import AddTask from "./pages/AddRecipe/AddRecipe.jsx";
 
 import { Provider } from "react-redux";
 import { store } from "./redux/store.js";
 import UpdateTask from "./Components/UpdateTask/Update.jsx";
 import RecipeDetail from "./Components/Recipe/recipeDetails.jsx";
+import GoogleLogin from "./pages/GoogleLogin/GoogleLogin.jsx";
+import AddRecipe from "./pages/AddRecipe/AddRecipe.jsx";
+import AllRecipes from "./Components/Recipe/AllRecipes.jsx";
+import PrivateRoute from "./PrivateRoute/PrivateRoute.jsx";
+import PurchaseCoin from "./pages/PurchaseCoin/PurchaseCoin.jsx";
 
 const router = createBrowserRouter([
   {
@@ -16,12 +21,29 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/task/new",
-    element: <AddTask />,
+    path: "/add-recipe",
+    element: <AddRecipe />,
   },
   {
+    path: "/purchase-coin",
+    element: <PurchaseCoin />,
+  },
+  {
+    path: "/recipes",
+    element: <AllRecipes />,
+  },
+  {
+    path: "/login",
+    element: <GoogleLogin />,
+  },
+ 
+  {
     path: "/recipe/:id",
-    element: <RecipeDetail />,
+    element: (
+      <PrivateRoute>
+        <RecipeDetail />
+      </PrivateRoute>
+    ),
   },
 ]);
 

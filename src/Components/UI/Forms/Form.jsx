@@ -13,7 +13,14 @@ const Form = ({ children, submitHandler, defaultValues, resolver }) => {
 
   const onSubmit = (data) => {
     submitHandler(data);
-    reset();
+    reset({
+      recipeName:"",
+      recipeImage:"",
+      embeddedVideoCode:"",
+      country:"",
+      category:"",
+      recipeDetails:""
+    });
   };
   useEffect(() => reset(defaultValues), [defaultValues, reset, methods]);
   return (

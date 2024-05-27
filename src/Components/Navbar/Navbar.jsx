@@ -18,7 +18,7 @@ const Navbar = () => {
       try {
         const accessToken = getFromLocalStorage(authKey);
         if (accessToken) {
-          const response = await axios.get('http://localhost:6660/api/v1/auth/profile', {
+          const response = await axios.get('https://food-hud-backend.vercel.app/api/v1/auth/profile', {
             headers: {
               Authorization: accessToken
             }

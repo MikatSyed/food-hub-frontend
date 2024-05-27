@@ -15,7 +15,7 @@ const AllRecipes = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        let url = 'http://localhost:6660/api/v1/recipe';
+        let url = 'https://food-hud-backend.vercel.app/api/v1/recipe';
         const response = await axios.get(url);
         setRecipes(response.data.data);
       } catch (error) {
@@ -29,7 +29,7 @@ const AllRecipes = () => {
   useEffect(() => {
     const fetchFilteredRecipes = async () => {
       try {
-        let url = 'http://localhost:6660/api/v1/recipe';
+        let url = 'https://food-hud-backend.vercel.app/api/v1/recipe';
         const queryParams = {
           searchTerm: searchTerm || undefined,
           category: filters.category || undefined,

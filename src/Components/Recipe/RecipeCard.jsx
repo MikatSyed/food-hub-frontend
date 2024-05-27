@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaUser, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaUser, FaMapMarkerAlt, FaHeart } from 'react-icons/fa'; // Import other reaction icons as needed
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
@@ -8,12 +8,13 @@ const RecipeCard = ({ recipe }) => {
   const navigate = useNavigate();
   const [userCoin, setUserCoin] = useState(0);
   const [userData, setUserData] = useState(null);
+  const [isLiked, setIsLiked] = useState(false); // State to track whether the user has liked the recipe
   const accessToken = localStorage.getItem('accessToken');
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('http://localhost:6660/api/v1/auth/profile', {
+        const response = await axios.get('https://food-hub-eta.vercel.app/api/v1/auth/profile', {
           headers: {
             Authorization: accessToken
           }
@@ -31,77 +32,71 @@ const RecipeCard = ({ recipe }) => {
   }, [accessToken]);
 
   const handleViewRecipe = async () => {
+    // Your existing logic for viewing recipe
+  };
+
+  const handleLikeRecipe = async () => {
     if (!accessToken) {
-      toast.error("Please login to view the recipe.");
-      setTimeout(()=>{
+      toast.error("Please login to react to the recipe.");
+      setTimeout(() => {
         navigate('/login');
-      },3000)
+      }, 3000);
       return;
     }
 
-    if (recipe.creatorEmail === userData.email) {
-      navigate(`/recipe/${recipe._id}`);
-      return;
-    }
-
-    if (userCoin < 10) {
-      toast.error("You don't have enough coins. Please purchase coins to view the recipe.");
-      setTimeout(()=>{
-        navigate('/purchase-coin');
-      },3000)
-     
-      return;
-    }
-
-    if (recipe.purchased_by.includes(userData.email)) {
-      navigate(`/recipe/${recipe._id}`);
-      return;
-    }
-
-    const confirmPurchase = window.confirm("You are about to spend 10 coins to view the recipe. Do you want to continue?");
-    if (confirmPurchase) {
-      try {
-        await axios.post(`http://localhost:6660/api/v1/recipe/${recipe._id}/purchase`, {}, {
+    try {
+      const response = await axios.post(
+        `http://localhost:6660/api/v1/recipe/${recipe._id}/like`, // Your API endpoint for liking a recipe
+        {},
+        {
           headers: {
             Authorization: accessToken
           }
-        });
+        }
+      );
 
-        setUserCoin(prev => prev - 10);
-        toast.success("Recipe purchased successfully!");
-        navigate(`/recipe/${recipe._id}`);
-      } catch (error) {
-        console.error('Error purchasing recipe:', error);
-        toast.error("Error purchasing recipe. Please try again.");
-      }
+      // Toggle the like state
+      setIsLiked(prev => !prev);
+      // Show success message
+      toast.success(response.data.message);
+    } catch (error) {
+      console.error('Error reacting to recipe:', error);
+      toast.error("Error reacting to recipe. Please try again.");
     }
   };
 
   return (
     <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-      <div className="relative h-60 w-full">
-        <img
-          src={recipe.recipeImage}
-          alt={recipe.recipeName}
-          className="h-full w-full object-cover"
-        />
-        <div className="absolute top-0 right-0 m-4 bg-[#fb651e] text-white px-3 py-1 rounded-full text-sm font-medium">
-          {recipe.category}
-        </div>
-      </div>
+      {/* Recipe card content */}
       <div className="p-4">
-        <h3 className="text-xl font-bold text-gray-900 mb-2">{recipe.recipeName}</h3>
-        <div className="flex items-center mb-4">
-          <div className="flex items-center mr-4">
-            <FaMapMarkerAlt className="h-5 w-5 text-gray-400 mr-1" />
-            <span className="text-gray-500 text-sm">{recipe.country}</span>
+        {/* Recipe details */}
+        <div className="flex justify-between items-center mb-4">
+          <div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">{recipe.recipeName}</h3>
+            <div className="flex items-center">
+              <FaMapMarkerAlt className="h-5 w-5 text-gray-400 mr-1" />
+              <span className="text-gray-500 text-sm">{recipe.country}</span>
+            </div>
           </div>
-          <div className="flex items-center my-2">
+          <div>
             <FaUser className="h-4 w-4 text-gray-400 mr-1" />
             <span className="text-gray-500 text-sm">{recipe.creatorEmail}</span>
           </div>
         </div>
         
+        {/* Reaction buttons */}
+        <div className="flex justify-end items-center mb-4">
+          {/* Like button */}
+          <button
+            onClick={handleLikeRecipe}
+            className={`text-gray-500 hover:text-red-500 transition-colors duration-300 ${isLiked ? 'text-red-500' : ''}`}
+          >
+            <FaHeart className="h-6 w-6" />
+          </button>
+          {/* Add more reaction buttons as needed */}
+        </div>
+
+        {/* View recipe button */}
         <div className="flex justify-end">
           <button
             onClick={handleViewRecipe}
@@ -111,6 +106,8 @@ const RecipeCard = ({ recipe }) => {
           </button>
         </div>
       </div>
+
+      {/* Toast notifications */}
       <Toaster position="top-right" reverseOrder={false} />
     </div>
   );

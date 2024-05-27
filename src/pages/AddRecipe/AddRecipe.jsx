@@ -49,7 +49,7 @@ const AddRecipe = () => {
       }
       
       console.log(values, '40');
-      const res =   await axios.post('http://localhost:6660/api/v1/recipe', values,{
+      const res =   await axios.post('https://food-hud-backend.vercel.app/api/v1/recipe', values,{
         headers: {
           Authorization: accessToken
         }

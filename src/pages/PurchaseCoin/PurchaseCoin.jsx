@@ -35,7 +35,7 @@ const PurchaseCoin = () => {
       const accessToken = localStorage.getItem('accessToken');
 
       const response = await axios.post(
-        'http://localhost:6660/api/v1/payment/init',
+        'https://food-hud-backend.vercel.app/api/v1/payment/init',
         {
           total_amount: price,
           coins: coins,

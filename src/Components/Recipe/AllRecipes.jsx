@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { FaUser, FaMapMarkerAlt, FaShoppingCart, FaSearch } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
 import { foodCategoryOptions, countryCategoryOptions } from '../../constants/constants';
 import axios from 'axios';
 import RecipeCard from './RecipeCard';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const AllRecipes = () => {
   const [recipes, setRecipes] = useState([]);
@@ -14,47 +13,45 @@ const AllRecipes = () => {
     country: '',
   });
   const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const [totalPages, setTotalPages] = useState(1); // Default total pages set to 1
+  const [loading, setLoading] = useState(false);
   const location = useLocation();
 
-  // Dynamically set the base URL for the API based on the environment
+  const itemsPerPage = 6; // Define how many items to show per page
+
+  // Adjust the base API URL depending on the environment (development or production)
   const apiBaseUrl = process.env.NODE_ENV === 'development'
     ? 'http://localhost:6660'
     : 'https://food-hud-backend.vercel.app';
 
   useEffect(() => {
     const fetchRecipes = async () => {
+      setLoading(true);
       try {
-        const response = await axios.get(`${apiBaseUrl}/api/v1/recipe`);
-        setRecipes(response.data.data);
+        const response = await axios.get(`${apiBaseUrl}/api/v1/recipe`, {
+          params: {
+            searchTerm: searchTerm || undefined,
+            category: filters.category || undefined,
+            country: filters.country || undefined,
+            page,
+            limit: itemsPerPage, // Pagination limit
+          },
+        });
+
+        const recipeData = response?.data?.data || [];
+        const totalRecipes = response?.data?.meta?.total || 0; // Get total recipes from API
+
+        setRecipes(recipeData);
+        setTotalPages(Math.ceil(totalRecipes / itemsPerPage)); // Calculate total pages based on totalRecipes and itemsPerPage
       } catch (error) {
         console.error('Error fetching recipes:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchRecipes();
-  }, []);
-
-  useEffect(() => {
-    const fetchFilteredRecipes = async () => {
-      try {
-        const queryParams = {
-          searchTerm: searchTerm || undefined,
-          category: filters.category || undefined,
-          country: filters.country || undefined,
-        };
-
-        const response = await axios.get(`${apiBaseUrl}/api/v1/recipe`, { params: queryParams });
-        setRecipes(response.data.data);
-      } catch (error) {
-        console.error('Error fetching recipes:', error);
-      }
-    };
-
-    if (searchTerm || filters.category || filters.country) {
-      fetchFilteredRecipes();
-    }
-  }, [searchTerm, filters]);
+  }, [searchTerm, filters, page]);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -65,6 +62,13 @@ const AllRecipes = () => {
       ...prevFilters,
       [field]: value,
     }));
+    setPage(1); // Reset to first page when filters are applied
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setPage(newPage);
+    }
   };
 
   return (
@@ -121,26 +125,55 @@ const AllRecipes = () => {
           </div>
         )}
       </div>
-      {location.pathname === '/recipes' ? (
-        <InfiniteScroll
-          dataLength={recipes.length}
-          next={() => setPage(page + 1)}
-          hasMore={hasMore}
-          loader={<h4>Loading...</h4>}
-          endMessage={<p>No more recipes to load</p>}
-        >
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
             {recipes.map((recipe) => (
               <RecipeCard key={recipe._id} recipe={recipe} />
             ))}
           </div>
-        </InfiniteScroll>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
-          {recipes.slice(0, 6).map((recipe) => (
-            <RecipeCard key={recipe._id} recipe={recipe} />
-          ))}
-        </div>
+
+          {/* Pagination Component */}
+          <div className="mt-12 flex justify-center items-center">
+            <ul className="inline-flex space-x-2">
+              {/* Previous Button */}
+              <li>
+                <button
+                  onClick={() => handlePageChange(page - 1)}
+                  disabled={page === 1}
+                  className={`px-3 py-1.5 text-white ${page === 1 ? 'bg-gray-400' : 'bg-green-500 hover:bg-green-700'} rounded-md`}
+                >
+                  Previous
+                </button>
+              </li>
+
+              {/* Page Numbers */}
+              {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
+                <li key={pageNumber}>
+                  <button
+                    onClick={() => handlePageChange(pageNumber)}
+                    className={`px-3 py-1.5 rounded-md ${page === pageNumber ? 'bg-green-500 text-white' : 'bg-white text-green-500 border border-green-500 hover:bg-green-500 hover:text-white'}`}
+                  >
+                    {pageNumber}
+                  </button>
+                </li>
+              ))}
+
+              {/* Next Button */}
+              <li>
+                <button
+                  onClick={() => handlePageChange(page + 1)}
+                  disabled={page === totalPages}
+                  className={`px-3 py-1.5 text-white ${page === totalPages ? 'bg-gray-400' : 'bg-green-500 hover:bg-green-700'} rounded-md`}
+                >
+                  Next
+                </button>
+              </li>
+            </ul>
+          </div>
+        </>
       )}
     </div>
   );

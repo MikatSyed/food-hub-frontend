@@ -28,14 +28,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
   },
-  // {
-  //   path: "/add-recipe",
-  //   element: (
-  //     <PrivateRoute>
-  //       <AddRecipe />
-  //     </PrivateRoute>
-  //   ),
-  // },
+ 
   {
     path: "/dashboard/profile",
     element: (

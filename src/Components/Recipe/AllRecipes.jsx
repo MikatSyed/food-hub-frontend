@@ -90,10 +90,10 @@ const AllRecipes = () => {
     <div className={`${location.pathname === '/' ? 'py-[5rem]' : ''}`}>
       {location.pathname === '/recipes' && <Navbar />}
 
-      <div className="mx-auto sm:px-6 md:px-[6rem] my-4">
+      <div className="mx-auto sm:px-6 md:px-[6rem] my-4 ">
         <div className="mb-8">
           <div className={`text-start  ${location.pathname === '/' ? '' : 'my-12'}`}>
-            <h2 className="text-2xl font-semibold text-gray-900 sm:text-4xl mb-6">
+            <h2 className="text-2xl font-semibold text-gray-900 sm:text-4xl mb-6 mx-4 md:mx-0">
               All Recipes
             </h2>
           </div>
@@ -115,7 +115,7 @@ const AllRecipes = () => {
           <div>Loading...</div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 mx-4 md:mx-0">
               {recipes.map((recipe) => (
                 <RecipeCard key={recipe._id} recipe={recipe} />
               ))}

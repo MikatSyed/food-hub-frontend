@@ -4,7 +4,7 @@ import { foodCategoryOptions, countryCategoryOptions } from '../../constants/con
 
 const FiltersRecipe = ({ searchTerm, handleSearch, filters, handleFilterChange, resetFilters }) => {
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between   ">
+    <div className="flex flex-col sm:flex-row items-center justify-between  mx-4 md:mx-0 ">
       {/* Search Input */}
       <div className="relative w-full sm:w-auto flex-1 mb-4 sm:mb-0 sm:mr-4">
         <FaSearch className="absolute top-1/2 left-4 transform -translate-y-1/2 text-gray-400" />
@@ -49,14 +49,15 @@ const FiltersRecipe = ({ searchTerm, handleSearch, filters, handleFilterChange, 
         </select>
       </div>
 
-      {/* Reset Button */}
+     
       <button
-        onClick={resetFilters}
-        className="flex items-center px-6 py-3.5 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300"
-      >
-        <FaRedoAlt className="mr-2" />
-      
-      </button>
+  onClick={resetFilters}
+  className="flex items-center px-6 py-3.5 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300 justify-start sm:justify-center"
+>
+  <FaRedoAlt className="mr-2" />
+  Reset Filters
+</button>
+
     </div>
   );
 };

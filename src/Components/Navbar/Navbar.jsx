@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FiMenu, FiX, FiChevronDown } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom'; // Import useLocation from react-router
 import { getFromLocalStorage } from '../../utils/local-storage';
 import axios from 'axios';
 import { TbCoinFilled } from "react-icons/tb";
@@ -10,8 +10,9 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState({});
   const [userData, setUserData] = useState(null);
-
-  const authKey = 'accessToken'; // Set your access token key here
+  const location = useLocation(); 
+  
+  const authKey = 'accessToken'; 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,8 +51,8 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    removeUserInfo(); // Remove user info from local storage
-    setUserData(null); // Clear user data state
+    removeUserInfo(); 
+    setUserData(null); 
   };
 
   const navItems = [
@@ -67,10 +68,13 @@ const Navbar = () => {
     ...(userData?.role === 'Admin' ? [{ title: 'Dashboard', href: '/dashboard' }] : []),
   ];
 
+  // Determine if the current pathname is '/recipes'
+  const isRecipesPage = location.pathname === '/recipes';
+
   return (
-    <nav className=" mx-auto sm:px-6 md:px-[6rem]">
+    <nav className={`mx-auto sm:px-6 md:px-[6rem] ${isRecipesPage ? 'bg-gray-900' : ''}`}>
       <div className="max-w-7xl py-4 mx-4 md:mx-0">
-        <div className="flex items-center justify-between h-16">
+        <div className={`flex items-center justify-between  ${isRecipesPage ? 'h-12' : 'h-16'}`}>
           <div className="flex items-center">
             <div className="flex-shrink-0 mr-8">
               <img
@@ -86,7 +90,7 @@ const Navbar = () => {
                 <li key={index} className="relative">
                   <Link
                     to={item.href}
-                    className="text-white font-semibold hover:text-[#22c55e] py-2 rounded-md text-md flex items-center"
+                    className='font-semibold text-white hover:text-[#22c55e] py-2 rounded-md text-md flex items-center'
                     onMouseEnter={() => toggleDropdown(index)}
                     onMouseLeave={closeDropdown}
                   >
@@ -96,25 +100,24 @@ const Navbar = () => {
               ))}
             </ul>
             {userData ? (
-  <div className="flex items-center space-x-4">
-    
-    <div className="flex items-center">
-      <TbCoinFilled  className="text-yellow-500 w-6 h-6" /> {/* Add coin icon */}
-      <span className="text-white ml-1">{userData?.coins} </span>
-    </div>
-    <div className='flex items-center'>
-      <p className='text-white px-2'>{userData?.displayName}</p>
-      <img src={userData?.photoURL} alt="User" className="w-10 h-10 rounded-full" />
-    </div>
-    <button className="bg-red-500 hover:bg-red-400 text-white hover:text-white font-semibold py-2 px-8 rounded-full ml-6" onClick={() => handleLogout()}>
-      Logout
-    </button>
-  </div>
-) : (
-  <Link to="/login" className="bg-white hover:bg-[#22c55e] text-[#22c55e] hover:text-white font-semibold py-2 px-8 rounded-full ml-6">
-    Login
-  </Link>
-)}
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center">
+                  <TbCoinFilled className="text-yellow-500 w-6 h-6" />
+                  <span className='text-white ml-1'>{userData?.coins}</span>
+                </div>
+                <div className='flex items-center'>
+                  <p className='text-white px-2'>{userData?.displayName}</p>
+                  <img src={userData?.photoURL} alt="User" className="w-10 h-10 rounded-full" />
+                </div>
+                <button className="bg-red-500 hover:bg-red-400 text-white font-semibold py-2 px-8 rounded-full ml-6" onClick={() => handleLogout()}>
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link to="/login" className={`font-semibold py-2 px-8 rounded-full ml-6 ${isRecipesPage ? 'bg-[#22c55e] text-white' : 'bg-white text-[#22c55e] hover:bg-[#22c55e] hover:text-white'}`}>
+                Login
+              </Link>
+            )}
           </div>
           <div className="flex items-center md:hidden">
             <button
@@ -137,19 +140,17 @@ const Navbar = () => {
               <div className="flex justify-between items-center">
                 <Link
                   to={item.href}
-                  className="text-white font-semibold hover:text-[#22c55e] block px-3 py-2 rounded-md text-base"
+                  className={`font-semibold block px-3 py-2 rounded-md text-base ${isRecipesPage ? 'text-black' : 'text-white'} hover:text-[#22c55e]`}
                 >
                   {item.title}
                 </Link>
                 {item.subItems && item.subItems.length > 0 && (
                   <button
-                    className="text-white hover:text-[#22c55e] focus:outline-none"
+                    className={`focus:outline-none ${isRecipesPage ? 'text-black' : 'text-white'} hover:text-[#22c55e]`}
                     onClick={() => toggleDropdown(index)}
                   >
                     <FiChevronDown
-                      className={`h-5 w-5 ml-2 transform ${
-                        dropdownOpen[index] ? 'rotate-180' : 'rotate-0'
-                      }`}
+                      className={`h-5 w-5 ml-2 transform ${dropdownOpen[index] ? 'rotate-180' : 'rotate-0'}`}
                     />
                   </button>
                 )}
@@ -160,7 +161,7 @@ const Navbar = () => {
                     <Link
                       key={subIndex}
                       to={subItem.href}
-                      className="text-white hover:text-[#22c55e] block px-3 py-2 rounded-md text-base"
+                      className={`block px-3 py-2 rounded-md text-base ${isRecipesPage ? 'text-black' : 'text-white'} hover:text-[#22c55e]`}
                     >
                       {subItem.title}
                     </Link>
@@ -169,25 +170,24 @@ const Navbar = () => {
               )}
             </div>
           ))}
-            {userData ? (
-  <div className="flex items-center space-x-4">
-    
-    <div className="flex items-center">
-      <TbCoinFilled  className="text-yellow-500 w-6 h-6" /> {/* Add coin icon */}
-      <span className="text-white ml-1">{userData?.coins} </span>
-    </div>
-    <div>
-      <img src={userData?.photoURL} alt="User" className="w-10 h-10 rounded-full" />
-    </div>
-    <button className="bg-red-500 hover:bg-red-400 text-white hover:text-white font-semibold py-2 px-8 rounded-full ml-6" onClick={() => console.log('Logout')}>
-      Logout
-    </button>
-  </div>
-) : (
-  <Link to="/login" className="bg-white hover:bg-[#22c55e] text-[#22c55e] hover:text-white font-semibold py-2 px-8 rounded-full ml-6">
-    Login
-  </Link>
-)}
+          {userData ? (
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center">
+                <TbCoinFilled className="text-yellow-500 w-6 h-6" />
+                <span className={`${isRecipesPage ? 'text-black' : 'text-white'} ml-1`}>{userData?.coins}</span>
+              </div>
+              <div>
+                <img src={userData?.photoURL} alt="User" className="w-10 h-10 rounded-full" />
+              </div>
+              <button className="bg-red-500 hover:bg-red-400 text-white font-semibold py-2 px-8 rounded-full ml-6" onClick={() => console.log('Logout')}>
+                Logout
+              </button>
+            </div>
+          ) : (
+            <Link to="/login" className={`font-semibold py-2 px-8 rounded-full ml-6 ${isRecipesPage ? 'bg-[#22c55e] text-white' : 'bg-white text-[#22c55e] hover:bg-[#22c55e] hover:text-white'}`}>
+              Login
+            </Link>
+          )}
         </div>
       </div>
     </nav>

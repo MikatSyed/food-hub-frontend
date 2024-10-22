@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { FaSearch } from 'react-icons/fa';
-import { foodCategoryOptions, countryCategoryOptions } from '../../constants/constants';
 import axios from 'axios';
 import RecipeCard from './RecipeCard';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
+import FiltersRecipe from './FiltersRecipe';
+import Pagination from '../UI/Pagination/Pagination';
+import Footer from '../Footer/Footer';
+import Navbar from '../Navbar/Navbar';
+import { FiArrowRight } from 'react-icons/fi'; // Import the right arrow icon
 
 const AllRecipes = () => {
   const [recipes, setRecipes] = useState([]);
@@ -13,17 +16,18 @@ const AllRecipes = () => {
     country: '',
   });
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1); // Default total pages set to 1
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
 
-  const itemsPerPage = 6; // Define how many items to show per page
+  const itemsPerPage = 6;
 
   // Adjust the base API URL depending on the environment (development or production)
   const apiBaseUrl = process.env.NODE_ENV === 'development'
     ? 'http://localhost:6660'
     : 'https://food-hud-backend.vercel.app';
 
+  // Fetch recipes from the API
   useEffect(() => {
     const fetchRecipes = async () => {
       setLoading(true);
@@ -34,15 +38,15 @@ const AllRecipes = () => {
             category: filters.category || undefined,
             country: filters.country || undefined,
             page,
-            limit: itemsPerPage, // Pagination limit
+            limit: itemsPerPage,
           },
         });
 
         const recipeData = response?.data?.data || [];
-        const totalRecipes = response?.data?.meta?.total || 0; // Get total recipes from API
+        const totalRecipes = response?.data?.meta?.total || 0;
 
         setRecipes(recipeData);
-        setTotalPages(Math.ceil(totalRecipes / itemsPerPage)); // Calculate total pages based on totalRecipes and itemsPerPage
+        setTotalPages(Math.ceil(totalRecipes / itemsPerPage));
       } catch (error) {
         console.error('Error fetching recipes:', error);
       } finally {
@@ -53,128 +57,94 @@ const AllRecipes = () => {
     fetchRecipes();
   }, [searchTerm, filters, page]);
 
+  // Handle search input change
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
+    setPage(1); // Reset to the first page after search
   };
 
+  // Handle filter change
   const handleFilterChange = (field, value) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
       [field]: value,
     }));
-    setPage(1); // Reset to first page when filters are applied
+    setPage(1); // Reset to the first page when filters change
+  };
+
+  // Reset filters and search
+  const resetFilters = () => {
+    setSearchTerm('');
+    setFilters({
+      category: '',
+      country: '',
+    });
+    setPage(1); // Reset to the first page when filters are reset
   };
 
   const handlePageChange = (newPage) => {
-    if (newPage > 0 && newPage <= totalPages) {
-      setPage(newPage);
-    }
+    setPage(newPage);
   };
 
   return (
-    <div className="mx-auto sm:px-6 md:px-[6rem] my-4">
-      <div className="mb-8">
-        <div className="text-center mb-12">
-          <h2 className="text-2xl font-extrabold text-gray-900 sm:text-4xl">
-            All Recipes
-          </h2>
-          <p className="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
-            Find your next favorite dish today!
-          </p>
-        </div>
-        {location.pathname === '/recipes' && (
-          <div className="flex items-center">
-            <div className="relative flex-1 mr-4">
-              <FaSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search recipes..."
-                value={searchTerm}
-                onChange={handleSearch}
-                className="w-[400px] rounded-full bg-gray-100 pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#22c55e] transition-colors duration-300"
-              />
-            </div>
-            <div className="relative mr-4">
-              <select
-                value={filters.category}
-                onChange={(e) => handleFilterChange('category', e.target.value)}
-                className="w-full rounded-full bg-gray-100 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#22c55e] transition-colors duration-300"
-              >
-                <option value="">Filter by Category</option>
-                {foodCategoryOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="relative">
-              <select
-                value={filters.country}
-                onChange={(e) => handleFilterChange('country', e.target.value)}
-                className="w-full rounded-full bg-gray-100 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#22c55e] transition-colors duration-300"
-              >
-                <option value="">Filter by Country</option>
-                {countryCategoryOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+    <div className={`${location.pathname === '/' ? 'py-[5rem]' : ''}`}>
+      {location.pathname === '/recipes' && <Navbar />}
+
+      <div className="mx-auto sm:px-6 md:px-[6rem] my-4">
+        <div className="mb-8">
+          <div className={`text-start  ${location.pathname === '/' ? '' : 'my-12'}`}>
+            <h2 className="text-2xl font-semibold text-gray-900 sm:text-4xl mb-6">
+              All Recipes
+            </h2>
           </div>
+
+          {/* Filters Component */}
+          {location.pathname === '/recipes' && (
+            <FiltersRecipe
+              searchTerm={searchTerm}
+              handleSearch={handleSearch}
+              filters={filters}
+              handleFilterChange={handleFilterChange}
+              resetFilters={resetFilters}
+            />
+          )}
+        </div>
+
+        {/* Loading and Recipes List */}
+        {loading ? (
+          <div>Loading...</div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
+              {recipes.map((recipe) => (
+                <RecipeCard key={recipe._id} recipe={recipe} />
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {location.pathname === '/recipes' && (
+              <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            )}
+
+            {/* See More Button for Homepage */}
+            {location.pathname === '/' && (
+              <div className="flex justify-center mt-8">
+                <Link
+                  to="/recipes"
+                  className="flex items-center justify-center bg-green-500 text-white hover:bg-green-600 px-6 py-3 rounded-md text-lg font-semibold transition duration-300"
+                >
+                  See More <FiArrowRight className="ml-2" />
+                </Link>
+              </div>
+            )}
+          </>
         )}
       </div>
-      {loading ? (
-        <div>Loading...</div>
-      ) : (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
-            {recipes.map((recipe) => (
-              <RecipeCard key={recipe._id} recipe={recipe} />
-            ))}
-          </div>
-
-          {/* Pagination Component */}
-          <div className="mt-12 flex justify-center items-center">
-            <ul className="inline-flex space-x-2">
-              {/* Previous Button */}
-              <li>
-                <button
-                  onClick={() => handlePageChange(page - 1)}
-                  disabled={page === 1}
-                  className={`px-3 py-1.5 text-white ${page === 1 ? 'bg-gray-400' : 'bg-green-500 hover:bg-green-700'} rounded-md`}
-                >
-                  Previous
-                </button>
-              </li>
-
-              {/* Page Numbers */}
-              {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
-                <li key={pageNumber}>
-                  <button
-                    onClick={() => handlePageChange(pageNumber)}
-                    className={`px-3 py-1.5 rounded-md ${page === pageNumber ? 'bg-green-500 text-white' : 'bg-white text-green-500 border border-green-500 hover:bg-green-500 hover:text-white'}`}
-                  >
-                    {pageNumber}
-                  </button>
-                </li>
-              ))}
-
-              {/* Next Button */}
-              <li>
-                <button
-                  onClick={() => handlePageChange(page + 1)}
-                  disabled={page === totalPages}
-                  className={`px-3 py-1.5 text-white ${page === totalPages ? 'bg-gray-400' : 'bg-green-500 hover:bg-green-700'} rounded-md`}
-                >
-                  Next
-                </button>
-              </li>
-            </ul>
-          </div>
-        </>
-      )}
+      {location.pathname === '/recipes' && <Footer />}
     </div>
   );
 };

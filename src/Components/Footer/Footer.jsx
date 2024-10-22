@@ -3,8 +3,8 @@ import { AiFillTwitterSquare, AiFillFacebook, AiFillInstagram, AiFillLinkedin, A
 
 const Footer = () => {
   return (
-    <div className='mx-auto sm:px-6 md:px-[7rem] bg-black text-white'>
-      <div className="mx-auto py-12 lg:py-16 px-4">
+    <div className='mx-auto sm:px-6 md:px-[6rem] bg-gray-900 text-white'>
+      <div className="mx-auto py-12 lg:py-16">
         <div className="flex flex-col space-y-8 md:flex-row md:space-y-0">
           <div className="md:pr-16">
             <a className="block h-[45px] w-[45px] sm:h-[60px] sm:w-[60px]" href="/" title="Food Hub">

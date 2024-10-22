@@ -11,11 +11,7 @@ function App() {
     <>
      <Header/>
      <SuccessStories/>
-   
      <AllRecipes/>
-
-
-
      <Footer/>
     </>
   );

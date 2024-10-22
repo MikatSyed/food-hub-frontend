@@ -3,13 +3,14 @@ import { initializeApp } from "firebase/app";
 import { getAuth,GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDBpX6aRlaTxO0i72OJrYOCYFbyMtMswEE",
-  authDomain: "food-hub-16961.firebaseapp.com",
-  projectId: "food-hub-16961",
-  storageBucket: "food-hub-16961.appspot.com",
-  messagingSenderId: "165931689496",
-  appId: "1:165931689496:web:a22f9e524e45fc21b2856d"
+  apiKey: "AIzaSyDrr1Us56IbjrWX40fjE34D-5HotjmHhYI",
+  authDomain: "food-app-47253.firebaseapp.com",
+  projectId: "food-app-47253",
+  storageBucket: "food-app-47253.appspot.com",
+  messagingSenderId: "776151857643",
+  appId: "1:776151857643:web:03beff50efb7256e8781ae"
 };
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

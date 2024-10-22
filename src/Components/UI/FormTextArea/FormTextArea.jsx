@@ -1,7 +1,7 @@
 import { useFormContext, Controller } from "react-hook-form";
 import { getErrorMessageByPropertyName } from "../../../utils/schema-validator";
 
-const FormTextArea = ({ name, label, rows, value, placeholder }) => {
+const FormTextArea = ({ name, label, rows, value, placeholder,defaultValue }) => {
   const {
     control,
     formState: { errors },
@@ -10,7 +10,7 @@ const FormTextArea = ({ name, label, rows, value, placeholder }) => {
   const errorMessage = getErrorMessageByPropertyName(errors, name);
   return (
     <>
-      {label ? <label htmlFor={name}>{label}</label> : null}
+      {label ? <label htmlFor={name}   className="block text-gray-700 font-medium">{label}</label> : null}
       <Controller
         control={control}
         name={name}
@@ -22,7 +22,7 @@ const FormTextArea = ({ name, label, rows, value, placeholder }) => {
             placeholder={placeholder}
             className="mt-1 p-2 w-full border rounded-md"
             {...field}
-            defaultValue={value}
+            defaultValue={defaultValue}
           />
         )}
       />

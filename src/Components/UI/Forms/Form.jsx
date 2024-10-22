@@ -19,7 +19,8 @@ const Form = ({ children, submitHandler, defaultValues, resolver }) => {
       embeddedVideoCode:"",
       country:"",
       category:"",
-      recipeDetails:""
+      recipeDetails:"",
+      comment:""
     });
   };
   useEffect(() => reset(defaultValues), [defaultValues, reset, methods]);

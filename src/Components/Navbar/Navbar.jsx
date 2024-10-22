@@ -10,7 +10,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState({});
   const [userData, setUserData] = useState(null);
-  console.log(userData?.displayName)
+
   const authKey = 'accessToken'; // Set your access token key here
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const Navbar = () => {
       try {
         const accessToken = getFromLocalStorage(authKey);
         if (accessToken) {
-          const response = await axios.get('https://food-hud-backend.vercel.app/api/v1/auth/profile', {
+          const response = await axios.get('http://localhost:6660/api/v1/auth/profile', {
             headers: {
               Authorization: accessToken
             }
@@ -63,14 +63,12 @@ const Navbar = () => {
       title: 'Recipes',
       href: '/recipes',
     },
-    {
-      title: 'Add Recipes',
-      href: '/add-recipe',
-    },
+
+    ...(userData?.role === 'Admin' ? [{ title: 'Dashboard', href: '/dashboard' }] : []),
   ];
 
   return (
-    <nav className=" mx-auto sm:px-6 md:px-[7rem]">
+    <nav className=" mx-auto sm:px-6 md:px-[6rem]">
       <div className="max-w-7xl py-4 mx-4 md:mx-0">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
@@ -104,7 +102,8 @@ const Navbar = () => {
       <TbCoinFilled  className="text-yellow-500 w-6 h-6" /> {/* Add coin icon */}
       <span className="text-white ml-1">{userData?.coins} </span>
     </div>
-    <div>
+    <div className='flex items-center'>
+      <p className='text-white px-2'>{userData?.displayName}</p>
       <img src={userData?.photoURL} alt="User" className="w-10 h-10 rounded-full" />
     </div>
     <button className="bg-red-500 hover:bg-red-400 text-white hover:text-white font-semibold py-2 px-8 rounded-full ml-6" onClick={() => handleLogout()}>

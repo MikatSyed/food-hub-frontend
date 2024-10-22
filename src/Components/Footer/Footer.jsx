@@ -48,11 +48,11 @@ const Footer = () => {
         </div>
         <div className="mt-8 border-t border-gray-200 pt-8 md:flex md:items-center md:justify-between">
           <div className="flex space-x-6 md:order-2">
-            <a href="https://twitter.com/foodhub" target="_blank"><AiFillTwitterSquare size={25} /></a>
-            <a href="https://www.facebook.com/FoodHub/" target="_blank"><AiFillFacebook size={25} /></a>
-            <a href="https://www.instagram.com/foodhub" target="_blank"><AiFillInstagram size={25} /></a>
-            <a href="https://www.linkedin.com/company/foodhub/" target="_blank"><AiFillLinkedin size={25} /></a>
-            <a href="https://www.youtube.com/c/foodhub" target="_blank"><AiFillYoutube size={25} /></a>
+           
+            <a href="https://web.facebook.com/syedmilka.cricket/" target="_blank"><AiFillFacebook size={25} /></a>
+            <a href="https://www.instagram.com/mikat_syed/" target="_blank"><AiFillInstagram size={25} /></a>
+            <a href="https://www.linkedin.com/in/mikat-syed/" target="_blank"><AiFillLinkedin size={25} /></a>
+           
           </div>
           <p className="mt-8 text-base md:order-1 md:mt-0">&copy; 2024 Food Hub</p>
         </div>

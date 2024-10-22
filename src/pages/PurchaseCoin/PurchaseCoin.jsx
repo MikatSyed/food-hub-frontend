@@ -6,20 +6,20 @@ import axios from 'axios';
 
 const PurchaseCoinCard = ({ title, coins, price, onClick }) => {
   return (
-    <div className="bg-white shadow-2xl rounded-lg overflow-hidden mb-8 transition-transform duration-300 transform hover:scale-105">
+    <div className="bg-white border rounded-lg overflow-hidden mb-8 transition-transform duration-300 transform hover:shadow-md">
       <div className="p-8">
         <h3 className="text-2xl font-bold text-gray-900 mb-4">{title}</h3>
         <div className="flex items-center mb-6">
-          <span className="text-4xl font-bold text-[#fb651e] mr-2">{coins}</span>
+          <span className="text-4xl font-bold text-[#22c55e] mr-2">{coins}</span>
           <span className="text-gray-700 text-base">Coins</span>
         </div>
         <div className="flex items-center mb-6">
-          <span className="text-4xl font-bold text-[#fb651e] mr-2">${price}</span>
+          <span className="text-4xl font-bold text-[#22c55e] mr-2">${price}</span>
           <span className="text-gray-700 text-base">USD</span>
         </div>
         <button
           onClick={onClick}
-          className="bg-[#fb651e] hover:bg-[#e05716] text-white font-semibold py-3 px-6 rounded-full transition-colors duration-300 shadow-lg w-full"
+          className="bg-[#22c55e] hover:bg-[#22c55e] text-white font-semibold py-3 px-6 rounded-full transition-colors duration-300 shadow-lg w-full"
         >
           Buy Now
         </button>
@@ -29,13 +29,17 @@ const PurchaseCoinCard = ({ title, coins, price, onClick }) => {
 };
 
 const PurchaseCoin = () => {
-  const navigate = useNavigate()
+  
+  const apiUrl =
+  process.env.NODE_ENV === 'production'
+    ? 'https://food-hub-eta.vercel.app/api/v1/payment/init'
+    : 'http://localhost:6660/api/v1/payment/init';
   const handlePurchase = async (coins, price) => {
     try {
       const accessToken = localStorage.getItem('accessToken');
 
       const response = await axios.post(
-        'https://food-hud-backend.vercel.app/api/v1/payment/init',
+        apiUrl,
         {
           total_amount: price,
           coins: coins,
@@ -59,7 +63,7 @@ const PurchaseCoin = () => {
     }
   };
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="mx-auto sm:px-6 md:px-[6rem] my-4">
       <h2 className="text-3xl font-bold text-gray-900 mb-8">Purchase Coins</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <PurchaseCoinCard

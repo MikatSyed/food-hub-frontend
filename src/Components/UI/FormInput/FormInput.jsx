@@ -12,6 +12,7 @@ const FormInput = ({
   validation,
   label,
   customStyle,
+  defaultValue 
 }) => {
   const {
     control,
@@ -26,7 +27,7 @@ const FormInput = ({
       {label && (
         <label
           htmlFor={name}
-          className="block text-sm font-medium text-gray-600"
+          className="block text-sm font-medium text-gray-700 mb-1"
         >
           {label}
         </label>
@@ -42,9 +43,8 @@ const FormInput = ({
             style={customStyle}
             {...field}
             value={value ? value : field.value}
-            className="mt-1 p-2 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300
-                       transition duration-300 ease-in-out
-                       hover:border-blue-500 focus:border-blue-500"
+            defaultValue ={defaultValue}
+            className="block w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-[#22c55e] focus:border-transparent focus:outline-none "
           />
         )}
       />

@@ -9,8 +9,8 @@ const PurchaseCoinCard = ({ title, coins, price, bonus, onClick, tier }) => {
       case 'basic':
         return {
           bgColor: 'bg-white', // White for basic
-          textColor: 'text-[#22c55e]', // Standard green
-          borderColor: 'border-green-300',
+          textColor: 'text-green-500', // Standard green
+          borderColor: 'border-green-500',
           buttonColor: 'bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white',
           icon: <FaCheck className="text-[#22c55e] h-6 w-6" />, // Basic check icon
           badge: 'Basic',
@@ -18,9 +18,9 @@ const PurchaseCoinCard = ({ title, coins, price, bonus, onClick, tier }) => {
       case 'standard':
         return {
           bgColor: 'bg-white',
-          textColor: 'text-green-400', // Green text for standard
-          borderColor: 'border-green-400',
-          buttonColor: 'bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white',
+          textColor: 'text-green-500', // Green text for standard
+          borderColor: 'border-green-500',
+          buttonColor: 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-500 hover:to-green-700 text-white',
           icon: <FaMedal className="text-green-400 h-6 w-6" />, // Standard medal icon
           badge: 'Standard',
         };
@@ -29,7 +29,7 @@ const PurchaseCoinCard = ({ title, coins, price, bonus, onClick, tier }) => {
           bgColor: 'bg-white',
           textColor: 'text-green-500', // Darker green for premium
           borderColor: 'border-green-500',
-          buttonColor: 'bg-gradient-to-r from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white',
+          buttonColor: 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-500 hover:to-green-700 text-white',
           icon: <FaCrown className="text-green-500 h-6 w-6" />, // Premium crown icon
           badge: 'Premium',
         };
@@ -44,7 +44,7 @@ const PurchaseCoinCard = ({ title, coins, price, bonus, onClick, tier }) => {
     <div className={` mx-4 md:mx-0 border rounded-lg overflow-hidden mb-8 transition-transform duration-300 transform hover:shadow-md ${borderColor} ${bgColor}`}>
       <div className="p-8">
         <div className="flex items-center justify-between mb-4">
-          <span className={`bg-green-400 text-white font-bold text-sm py-1 px-3 rounded-full`}>{badge}</span>
+          <span className={`bg-green-500 text-white font-bold text-sm py-1 px-3 rounded-full`}>{badge}</span>
           {icon}
         </div>
         <h3 className={`text-2xl font-bold mb-4 ${textColor}`}>{title}</h3>
@@ -77,6 +77,11 @@ const PurchaseCoin = () => {
   const handlePurchase = async (coins, price) => {
     try {
       const accessToken = localStorage.getItem('accessToken');
+      if (!accessToken) {
+        toast.error('You need to log in to make a purchase.');
+        return;
+      }
+      
 
       const response = await axios.post(
         apiUrl,
@@ -104,7 +109,7 @@ const PurchaseCoin = () => {
   };
 
   return (
-    <div className="mx-auto sm:px-6 md:px-[6rem] my-4 ">
+    <div className="mx-auto sm:px-6 md:px-[6rem] my-4 main">
       <h2 className="text-3xl font-bold text-gray-900 mb-8 mx-4 md:mx-0">Purchase Coins</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <PurchaseCoinCard

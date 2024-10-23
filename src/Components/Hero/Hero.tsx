@@ -14,12 +14,7 @@ const Hero = () => {
          >
            See Recipes
          </button></Link>
-         <Link to="/add-recipe">     <button
-           
-           className="bg-white hover:bg-[#22c55e] text-[#22c55e] hover:text-white font-semibold py-3 px-7 rounded-full"
-         >
-           Add Recipes
-         </button></Link>
+        
       
         </div>
       </div>

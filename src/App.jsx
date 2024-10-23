@@ -9,13 +9,13 @@ import PurchaseCoin from "./pages/PurchaseCoin/PurchaseCoin";
 
 function App() {
   return (
-    <>
+    <div className="main">
      <Header/>
      <SuccessStories/>
      <AllRecipes/>
      <PurchaseCoin/>
      <Footer/>
-    </>
+    </div>
   );
 }
 

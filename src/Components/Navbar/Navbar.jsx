@@ -24,7 +24,6 @@ const Navbar = () => {
               Authorization: accessToken
             }
           });
-          console.log(response.data.data,'22')
           setUserData(response.data.data);
         }
       } catch (error) {
@@ -74,7 +73,7 @@ const Navbar = () => {
   return (
     <nav className={`mx-auto sm:px-6 md:px-[6rem] ${isRecipesPage ? 'bg-gray-900' : ''}`}>
       <div className="max-w-7xl py-4 mx-4 md:mx-0">
-        <div className={`flex items-center justify-between  ${isRecipesPage ? 'h-12' : 'h-16'}`}>
+        <div className={`flex items-center justify-between ${isRecipesPage ? 'h-12' : 'h-16'}`}>
           <div className="flex items-center">
             <div className="flex-shrink-0 mr-8">
               <img
@@ -120,6 +119,18 @@ const Navbar = () => {
             )}
           </div>
           <div className="flex items-center md:hidden">
+            {userData && (
+              <div className="flex items-center space-x-2 mr-4">
+                <div className="flex items-center">
+                  <TbCoinFilled className="text-yellow-500 w-6 h-6" />
+                  <span className='text-white ml-1'>{userData?.coins}</span>
+                </div>
+                <div className="flex items-center">
+                  <p className='text-white px-2'>{userData?.displayName}</p>
+                  <img src={userData?.photoURL} alt="User" className="w-10 h-10 rounded-full" />
+                </div>
+              </div>
+            )}
             <button
               className="text-white hover:text-[#22c55e] focus:outline-none"
               onClick={toggleNavbar}
@@ -132,62 +143,47 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-      {/* Mobile menu, toggle classes based on menu state */}
-      <div className={`${isOpen ? 'block' : 'hidden'} md:hidden`}>
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          {navItems.map((item, index) => (
-            <div key={index}>
-              <div className="flex justify-between items-center">
+
+      {/* Mobile Sidebar */}
+      <div className={`fixed inset-0 z-40 bg-gray-800 bg-opacity-75 transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <div className={`fixed top-0 right-0 w-3/4 h-full bg-white p-6 transform transition-transform ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+          <button
+            className="text-gray-800 hover:text-green-500 focus:outline-none"
+            onClick={toggleNavbar}
+          >
+            <FiX className="h-8 w-8" />
+          </button>
+          <div className="mt-8">
+            {navItems.map((item, index) => (
+              <div key={index} className="mb-4">
                 <Link
                   to={item.href}
-                  className={`font-semibold block px-3 py-2 rounded-md text-base ${isRecipesPage ? 'text-black' : 'text-white'} hover:text-[#22c55e]`}
+                  className="font-semibold block text-gray-800 hover:text-green-500 py-2"
+                  onClick={toggleNavbar}
                 >
                   {item.title}
                 </Link>
-                {item.subItems && item.subItems.length > 0 && (
-                  <button
-                    className={`focus:outline-none ${isRecipesPage ? 'text-black' : 'text-white'} hover:text-[#22c55e]`}
-                    onClick={() => toggleDropdown(index)}
-                  >
-                    <FiChevronDown
-                      className={`h-5 w-5 ml-2 transform ${dropdownOpen[index] ? 'rotate-180' : 'rotate-0'}`}
-                    />
-                  </button>
-                )}
               </div>
-              {dropdownOpen[index] && (
-                <div className="pl-4">
-                  {item?.subItems?.map((subItem, subIndex) => (
-                    <Link
-                      key={subIndex}
-                      to={subItem.href}
-                      className={`block px-3 py-2 rounded-md text-base ${isRecipesPage ? 'text-black' : 'text-white'} hover:text-[#22c55e]`}
-                    >
-                      {subItem.title}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-          {userData ? (
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center">
-                <TbCoinFilled className="text-yellow-500 w-6 h-6" />
-                <span className={`${isRecipesPage ? 'text-black' : 'text-white'} ml-1`}>{userData?.coins}</span>
+            ))}
+            {userData ? (
+              <div className="mt-6">
+                <button
+                  onClick={handleLogout}
+                  className="w-full bg-red-500 hover:bg-red-400 text-white font-semibold py-2 rounded-full"
+                >
+                  Logout
+                </button>
               </div>
-              <div>
-                <img src={userData?.photoURL} alt="User" className="w-10 h-10 rounded-full" />
-              </div>
-              <button className="bg-red-500 hover:bg-red-400 text-white font-semibold py-2 px-8 rounded-full ml-6" onClick={() => console.log('Logout')}>
-                Logout
-              </button>
-            </div>
-          ) : (
-            <Link to="/login" className={`font-semibold py-2 px-8 rounded-full ml-6 ${isRecipesPage ? 'bg-[#22c55e] text-white' : 'bg-white text-[#22c55e] hover:bg-[#22c55e] hover:text-white'}`}>
-              Login
-            </Link>
-          )}
+            ) : (
+              <Link
+                to="/login"
+                className="w-full bg-white text-[#22c55e] hover:bg-[#22c55e] hover:text-white font-semibold py-2 rounded-full mt-6 block text-center"
+                onClick={toggleNavbar}
+              >
+                Login
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </nav>

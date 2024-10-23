@@ -7,6 +7,7 @@ import Pagination from '../UI/Pagination/Pagination';
 import Footer from '../Footer/Footer';
 import Navbar from '../Navbar/Navbar';
 import { FiArrowRight } from 'react-icons/fi'; // Import the right arrow icon
+import Loader from '../UI/Loader/Loader';
 
 const AllRecipes = () => {
   const [recipes, setRecipes] = useState([]);
@@ -87,7 +88,7 @@ const AllRecipes = () => {
   };
 
   return (
-    <div className={`${location.pathname === '/' ? 'py-[5rem]' : ''}`}>
+    <div className={`${location.pathname === '/' ? 'py-[5rem]' : 'main'}`}>
       {location.pathname === '/recipes' && <Navbar />}
 
       <div className="mx-auto sm:px-6 md:px-[6rem] my-4 ">
@@ -112,7 +113,7 @@ const AllRecipes = () => {
 
         {/* Loading and Recipes List */}
         {loading ? (
-          <div>Loading...</div>
+          <div><Loader/></div>
         ) : (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 mx-4 md:mx-0">

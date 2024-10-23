@@ -142,7 +142,7 @@ const RecipeCard = ({ recipe }) => {
           </div>
           <div className="absolute top-0 right-0 m-4 bg-gray-800 text-white px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1">
             <FaStar className="text-yellow-400" />
-            <span>{recipe?.averageRating || '4.5'}</span>
+            <span>{recipe?.averageRating || '0'}</span>
           </div>
         </div>
         <div className="p-4">

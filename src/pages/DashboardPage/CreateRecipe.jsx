@@ -13,6 +13,7 @@ const CreateRecipe = () => {
   const navigate = useNavigate();
   const [recipeImage, setRecipeImage] = useState(null);
 
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setRecipeImage(file);
@@ -44,7 +45,7 @@ const CreateRecipe = () => {
         values.recipeImage = imageUrl;
       }
       
-      const res = await axios.post('http://localhost:6660/api/v1/recipe', values, {
+      const res = await axios.post('https://food-hud-backend.vercel.app/api/v1/recipe', values, {
         headers: {
           Authorization: accessToken
         }

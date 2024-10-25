@@ -13,6 +13,7 @@ const Review = ({ serviceId }) => {
   const [loading, setLoading] = useState(false);
   const accessToken = getFromLocalStorage('accessToken');
 
+
   const onSubmit = async (values) => {
     if (rating > 0 && values.comment.trim() !== '') {
       const reviewData = { rating, comment: values.comment, serviceId };
@@ -21,7 +22,7 @@ const Review = ({ serviceId }) => {
         setLoading(true);
         
         // Make API request manually using axios
-        const response = await axios.post('http://localhost:6660/api/v1/review', reviewData,{
+        const response = await axios.post(`https://food-hud-backend.vercel.app/api/v1/review`, reviewData,{
             headers: {
               Authorization: accessToken
             }

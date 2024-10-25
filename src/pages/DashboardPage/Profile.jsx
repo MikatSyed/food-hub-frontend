@@ -9,11 +9,12 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const accessToken = getFromLocalStorage('accessToken');
 
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
 
-        const profileResponse = await axios.get('http://localhost:6660/api/v1/auth/profile', {
+        const profileResponse = await axios.get('https://food-hud-backend.vercel.app/api/v1/auth/profile', {
           headers: { Authorization: accessToken },
         });
         setUser(profileResponse?.data?.data);

@@ -23,17 +23,15 @@ const AllRecipes = () => {
 
   const itemsPerPage = 6;
 
-  // Adjust the base API URL depending on the environment (development or production)
-  const apiBaseUrl = process.env.NODE_ENV === 'development'
-    ? 'http://localhost:6660'
-    : 'https://food-hud-backend.vercel.app';
+
+ 
 
   // Fetch recipes from the API
   useEffect(() => {
     const fetchRecipes = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${apiBaseUrl}/api/v1/recipe`, {
+        const response = await axios.get(`https://food-hud-backend.vercel.app/api/v1/recipe`, {
           params: {
             searchTerm: searchTerm || undefined,
             category: filters.category || undefined,

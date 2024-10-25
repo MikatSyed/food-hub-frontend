@@ -12,10 +12,11 @@ const Recipe = () => {
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
   const accessToken = getFromLocalStorage('accessToken');
 
+
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await axios.get('http://localhost:6660/api/v1/recipe');
+        const response = await axios.get('https://food-hud-backend.vercel.app/api/v1/recipe');
         setRecipes(response.data.data);
       } catch (error) {
         console.error('Error fetching recipes:', error);
@@ -28,7 +29,7 @@ const Recipe = () => {
   const handleDelete = async () => {
     try {
       const accessToken = getFromLocalStorage('accessToken'); 
-      await axios.delete(`http://localhost:6660/api/v1/recipe/${selectedRecipeId}`, {
+      await axios.delete(`${apiUrl}/${selectedRecipeId}`, {
         headers: {
           Authorization:  accessToken 
         },
@@ -75,7 +76,7 @@ const Recipe = () => {
               </div>
               <div className="absolute top-0 right-0 m-4 bg-gray-800 text-white px-3 py-1 rounded-full text-sm font-medium flex items-center space-x-1">
                 <FaStar className="text-yellow-400" />
-                <span>{recipe?.averageRating || '4.5'}</span>
+                <span>{recipe?.averageRating || '0'}</span>
               </div>
             </div>
             <div className="p-4">

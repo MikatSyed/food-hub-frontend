@@ -12,15 +12,12 @@ const RecipeCard = ({ recipe }) => {
   const accessToken = localStorage.getItem('accessToken');
   const recipeId = recipe._id; // Store recipe ID for local storage
 
-  const apiBaseUrl =
-    process.env.NODE_ENV === 'development'
-      ? 'http://localhost:6660'
-      : 'https://food-hud-backend.vercel.app';
+ 
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`${apiBaseUrl}/api/v1/auth/profile`, {
+        const response = await axios.get(`https://food-hud-backend.vercel.app/api/v1/auth/profile`, {
           headers: {
             Authorization: accessToken,
           },
@@ -39,7 +36,7 @@ const RecipeCard = ({ recipe }) => {
     // Check local storage for liked status
     const likedRecipes = JSON.parse(localStorage.getItem('likedRecipes')) || [];
     setLiked(likedRecipes.includes(recipeId));
-  }, [accessToken, apiBaseUrl, recipeId]);
+  }, [accessToken, recipeId]);
 
   const handleViewRecipe = async () => {
     if (!accessToken) {
@@ -73,7 +70,7 @@ const RecipeCard = ({ recipe }) => {
     );
     if (confirmPurchase) {
       try {
-        await axios.post(`${apiBaseUrl}/api/v1/recipe/${recipe._id}/purchase`, {}, {
+        await axios.post(`https://food-hud-backend.vercel.app/api/v1/recipe/${recipe._id}/purchase`, {}, {
           headers: {
             Authorization: accessToken,
           },
@@ -109,7 +106,7 @@ const RecipeCard = ({ recipe }) => {
     }
 
     try {
-      const res = await axios.post(`${apiBaseUrl}/api/v1/recipe/react/${recipeId}/liked`, {}, {
+      const res = await axios.post(`https://food-hud-backend.vercel.app/api/v1/recipe/react/${recipeId}/liked`, {}, {
         headers: {
           Authorization: accessToken,
         },

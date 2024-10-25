@@ -15,12 +15,12 @@ const UpdateRecipe = () => {
   const [loading, setLoading] = useState(true);
   const accessToken = getFromLocalStorage('accessToken');
   const navigate = useNavigate();
- 
+
 
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const res = await axios.get(`http://localhost:6660/api/v1/recipe/${id}`, {
+        const res = await axios.get(`https://food-hud-backend.vercel.app/api/v1/recipe/${id}`, {
           headers: {
             Authorization: accessToken
           }
@@ -43,7 +43,7 @@ const UpdateRecipe = () => {
       const accessToken = getFromLocalStorage('accessToken');
       console.log(accessToken,'43')
 
-      const res = await axios.patch(`http://localhost:6660/api/v1/recipe/update/${id}`, values, {
+      const res = await axios.patch(`https://food-hud-backend.vercel.app/api/v1/recipe/update/${id}`, values, {
         headers: {
           Authorization: accessToken
         }

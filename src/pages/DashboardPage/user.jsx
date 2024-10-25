@@ -16,10 +16,11 @@ const User = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const accessToken = getFromLocalStorage('accessToken');
 
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:6660/api/v1/auth/users',{
+        const response = await axios.get('https://food-hud-backend.vercel.app/api/v1/auth/users',{
           headers: {
             Authorization: accessToken
           }
@@ -40,7 +41,7 @@ const User = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:6660/api/v1/auth/users/${selectedUserId}`,{
+      await axios.delete(`https://food-hud-backend.vercel.app/api/v1/auth/users/${selectedUserId}`,{
         headers: {
           Authorization: accessToken
         }

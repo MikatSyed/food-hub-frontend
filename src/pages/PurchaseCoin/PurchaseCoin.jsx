@@ -69,10 +69,7 @@ const PurchaseCoinCard = ({ title, coins, price, bonus, onClick, tier }) => {
 };
 
 const PurchaseCoin = () => {
-  const apiUrl =
-    process.env.NODE_ENV === 'production'
-      ? 'https://food-hub-eta.vercel.app/api/v1/payment/init'
-      : 'http://localhost:6660/api/v1/payment/init';
+
 
   const handlePurchase = async (coins, price) => {
     try {
@@ -84,7 +81,7 @@ const PurchaseCoin = () => {
       
 
       const response = await axios.post(
-        apiUrl,
+        'https://food-hud-backend.vercel.app/api/v1/payment/init',
         {
           total_amount: price,
           coins: coins,

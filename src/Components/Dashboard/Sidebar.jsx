@@ -1,25 +1,31 @@
 // src/components/Sidebar.jsx
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { MdDashboard, MdRestaurantMenu, MdPerson, MdExitToApp } from 'react-icons/md';
-import { removeUserInfo } from '../../utils/auth.service';
+import { FiX } from 'react-icons/fi';
 
-const Sidebar = () => {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    removeUserInfo(); 
-    navigate('/')
-    
-  };
-
+const Sidebar = ({ isOpen, onToggle }) => {
   return (
-    <div className="w-64 bg-gray-800 text-white flex flex-col h-full">
-      <div className="flex-1">
-        <div className="text-center py-4 border-b border-gray-700">
-          <h1 className="text-xl font-semibold">Dashboard</h1>
+    <div
+      className={`fixed md:relative  inset-y-0 left-0 w-64 bg-gray-800 text-white transition-transform duration-300 transform ${
+        isOpen ? 'translate-x-0 z-50' : '-translate-x-full z-40'
+      } md:translate-x-0`}
+    >
+      <div className="flex flex-col h-full">
+        <div className="text-center py-4 border-b border-gray-700 relative">
+          <img
+            src="https://foodhub.modeltheme.com/wp-content/themes/foodhub/images/logo.png"
+            alt="Logo"
+            className="h-[30px] w-[150px] ml-2"
+          />
+          <button
+            onClick={onToggle}
+            className="absolute top-4 right-4 text-white hover:text-gray-200 md:hidden"
+          >
+            <FiX size={24} />
+          </button>
         </div>
-        <nav className="mt-6">
+        <nav className="mt-6 flex-1">
           <ul>
             <li>
               <Link to="/dashboard" className="flex items-center p-4 hover:bg-gray-700">
@@ -41,12 +47,15 @@ const Sidebar = () => {
             </li>
           </ul>
         </nav>
-      </div>
-      <div className="p-4 border-t border-gray-700">
-        <button className="w-full bg-gray-900 text-white py-2 px-4 rounded-lg flex items-center justify-center" onClick={() => handleLogout()}>
-          <MdExitToApp className="text-lg mr-2" />
-          Logout
-        </button>
+        <div className="p-4 border-t border-gray-700">
+          <button
+            className="w-full bg-gray-900 text-white py-2 px-4 rounded-lg flex items-center justify-center"
+            onClick={onToggle}
+          >
+            <MdExitToApp className="text-lg mr-2" />
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -20,7 +20,7 @@ const RecipeDetail = () => {
 
   const fetchReviews = async () => {
     try {
-      const response = await axios.get(`http://localhost:6660/api/v1/review/${id}`, {
+      const response = await axios.get(`https://food-hud-backend.vercel.app/api/v1/review/${id}`, {
         headers: {
           Authorization: accessToken,
         },
@@ -38,7 +38,7 @@ const RecipeDetail = () => {
       try {
         setLoading(true);
 
-        const response = await axios.post('http://localhost:6660/api/v1/review', reviewData, {
+        const response = await axios.post(`https://food-hud-backend.vercel.app/api/v1/review`, reviewData, {
           headers: {
             Authorization: accessToken,
           },
@@ -75,7 +75,7 @@ const RecipeDetail = () => {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const response = await axios.get(`http://localhost:6660/api/v1/recipe/${id}`, {
+        const response = await axios.get(`https://food-hud-backend.vercel.app/api/v1/recipe/${id}`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -88,7 +88,7 @@ const RecipeDetail = () => {
 
     const fetchSuggestions = async () => {
       try {
-        const response = await axios.get(`http://localhost:6660/api/v1/recipe/suggestion/${id}`);
+        const response = await axios.get(`https://food-hud-backend.vercel.app/api/v1/recipe/suggestion/${id}`);
         setSuggestions(response.data.data);
       } catch (error) {
         console.error('Error fetching suggestions:', error);

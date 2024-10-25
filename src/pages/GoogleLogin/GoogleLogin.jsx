@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 const GoogleLogin = () => {
   const navigate = useNavigate();
+ 
   const handleGoogleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
@@ -23,7 +24,7 @@ const GoogleLogin = () => {
       };
   
       // Send user information to the server
-      const response = await axios.post('http://localhost:6660/api/v1/auth/login', userData);
+      const response = await axios.post('https://food-hud-backend.vercel.app/api/v1/auth/login', userData);
       console.log(response.data.data.accessToken,'23')
       storeUserInfo({ accessToken: response.data.data.accessToken });
       

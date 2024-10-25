@@ -5,14 +5,16 @@ import { FaUtensils, FaShoppingCart, FaUsers } from 'react-icons/fa';
 const DashboardContent = () => {
     const [statistics, setStatistics] = useState({
         totalRecipes: 0,
-        totalOrdersToday: 0, // Assuming this field will be added to the API
+        totalOrdersToday: 0, 
         totalCustomers: 0,
     });
+
+  
 
     useEffect(() => {
         const fetchStatistics = async () => {
             try {
-                const response = await axios.get('http://localhost:6660/api/v1/auth/statistics');
+                const response = await axios.get('https://food-hud-backend.vercel.app/api/v1/auth/statistic');
                 setStatistics({
                     totalRecipes: response?.data?.data?.totalRecipes,
                     totalOrdersToday: 24, // If orders today are static, you might want to keep this manually or adjust based on real API
